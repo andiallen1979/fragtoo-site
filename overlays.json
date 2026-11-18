@@ -6,8 +6,8 @@
       "description": "Steam Deck znver2 Gentoo overlay, kernel configs, and Gamescope profiles",
       "owner": "andiallen1979",
       "sync_type": "git",
-      "sync_uri": "https://github.com",
-      "homepage": "https://github.com",
+      "sync_uri": "https://github.com/andiallen1979/Fragtoo.git",
+      "homepage": "https://github.com/andiallen1979/Fragtoo",
       "quality": "experimental"
     },
     {
@@ -15,8 +15,8 @@
       "description": "Primary znver5 binhost overlay with portable gentool-* suite and custom ebuilds",
       "owner": "andiallen1979",
       "sync_type": "git",
-      "sync_uri": "https://github.com",
-      "homepage": "https://github.com",
+      "sync_uri": "https://github.com/andiallen1979/WakStab.git",
+      "homepage": "https://github.com/andiallen1979/WakStab",
       "quality": "experimental"
     }
   ]
