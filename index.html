@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fragtoo — Custom Gentoo Overlays & Target Builds</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --card: #171a23;
+      --border: #2a2f3d;
+      --accent: #8b5cf6;
+      --accent2: #10b981;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 2rem 1.25rem;
+    }
+    .wrap { max-width: 920px; margin: 0 auto; }
+    header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    h1 { font-size: 2.2rem; letter-spacing: -0.02em; }
+    h1 span { color: var(--accent); }
+    .sub { color: var(--muted); margin-top: 0.4rem; font-size: 1.05rem; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+    }
+    .card h2 { font-size: 1.15rem; margin-bottom: 0.4rem; color: #fff; }
+    .tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(139, 92, 246, 0.18);
+      color: #c4b5fd;
+      margin-bottom: 0.6rem;
+    }
+    .tag.green { background: rgba(16, 185, 129, 0.18); color: #6ee7b7; }
+    .card p { color: var(--muted); font-size: 0.92rem; margin-bottom: 0.9rem; }
+    a { color: #a78bfa; text-decoration: none; font-weight: 500; }
+    a:hover { text-decoration: underline; }
+    pre {
+      background: #0a0c10;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      overflow-x: auto;
+      font-size: 0.88rem;
+      color: #d1d5db;
+    }
+    footer {
+      margin-top: 2.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1><span>Fragtoo</span> &amp; Gentool Ecosystem</h1>
+      <p class="sub">Custom-tuned Gentoo Linux overlays, Portage tooling, and hardware-targeted builds.</p>
+    </header>
+
+    <div class="grid">
+      <div class="card">
+        <span class="tag green">Steam Deck &bull; znver2</span>
+        <h2>Fragtoo</h2>
+        <p>Custom Gentoo overlay, kernel configs, and SteamOS/Gamescope session profiles tailored for Steam Deck hardware.</p>
+        <a href="https://github.com/andiallen1979/Fragtoo">://github.com{ORG}/Fragtoo &rarr;</a>
+      </div>
+
+      <div class="card">
+        <span class="tag">Binhost &bull; znver5</span>
+        <h2>WakStab</h2>
+        <p>Primary build host overlay housing the portable <code>gentool-*</code> Portage configuration suite and custom ebuilds.</p>
+        <a href="https://github.com/andiallen1979/Fragtoo">://github.com{ORG}/Fragtoo &rarr;</a>
+      </div>
+
+      <div class="card">
+        <span class="tag">Dev &amp; QA Lab</span>
+        <h2>WakStabDevLab</h2>
+        <p>Dedicated bare-metal and QEMU development environment for testing overlays, kernels, and cross-target builds.</p>
+        <a href="https://github.com/andiallen1979/WakStabDevLab">github.com/andiallen1979/WakStabDevLab &rarr;</a>
+      </div>
+
+      <div class="card">
+        <span class="tag">Motorola &bull; arm64</span>
+        <h2>Minsktoo</h2>
+        <p>Experimental Gentoo <code>aarch64</code> overlay and device-specific kernel configuration for Motorola Minsk hardware.</p>
+        <a href="https://github.com/andiallen1979/Fragtoo">://github.com{ORG}/Fragtoo &rarr;</a>
+      </div>
+    </div>
+
+    <section class="card">
+      <h2>Quick Overlay Setup</h2>
+      <p>Enable any overlay via <code>eselect-repository</code>:</p>
+      <pre>eselect repository add Fragtoo git https://github.com/andiallen1979/Fragtoo.git
+emaint sync -r Fragtoo
+emerge -av app-misc/fragtoo-meta</pre>
+    </section>
+
+    <footer>
+      &copy; 2026 Fragtoo Project &bull; Hosted on GitHub Pages
+    </footer>
+  </div>
+</body>
+</html>
