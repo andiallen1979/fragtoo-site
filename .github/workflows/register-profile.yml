@@ -1,0 +1,39 @@
+name: Validate & Register Profile
+on:
+  issues:
+    types: [opened, edited]
+permissions:
+  contents: write
+  issues: write
+jobs:
+  register:
+    if: startsWith(github.event.issue.title, 'Register profile:')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate and publish profile
+        env:
+          ISSUE_BODY: \${{ github.event.issue.body }}
+          ISSUE_NUM: \${{ github.event.issue.number }}
+        run: |
+          python3 - << 'PY'
+          import json, os, re
+          m = re.search(r"```json\s*(\{.*?\})\s*```", os.environ["ISSUE_BODY"], re.S)
+          assert m, "Missing ```json block in issue body."
+          prof = json.loads(m.group(1))
+          pid = prof["id"].strip()
+          assert re.match(r"^[a-z0-9][a-z0-9_-]*$", pid), "Invalid profile id."
+          assert isinstance(prof.get("make_conf"), dict), "Missing make_conf object."
+          with open("profiles.json") as f:
+              reg = json.load(f)
+          reg["profiles"] = [p for p in reg["profiles"] if p["id"] != pid] + [prof]
+          with open("profiles.json", "w") as f:
+              json.dump(reg, f, indent=2); f.write("\n")
+          PY
+      - name: Commit and close
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "fragtoo-bot" && git config user.email "bot@fragtoo.com"
+          git commit -am "Register profile from issue #${{ github.event.issue.number }}" && git push
+          gh issue close "${{ github.event.issue.number }}" -c "Profile validated and published to https://fragtoo.com!"

@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "profiles": [
+    {
+      "id": "desktop-plasma-x86_64-v3",
+      "name": "Gentoo KDE Plasma Desktop (x86-64-v3)",
+      "arch": "amd64",
+      "author": "gentool-profiles",
+      "description": "Low-latency KDE Plasma desktop profile with x86-64-v3, LTO/PGO, PipeWire, Vulkan, and sane multimedia/gaming USE defaults.",
+      "make_conf": {
+        "COMMON_FLAGS": "-march=x86-64-v3 -O3 -pipe",
+        "USE": "X wayland kde plasma pipewire vulkan opengl vaapi vdpau lto pgo zstd screencast networkmanager bluetooth policykit udev dbus",
+        "FEATURES": "buildpkg binpkg-multi-instance parallel-fetch parallel-install",
+        "VIDEO_CARDS": "amdgpu radeonsi intel nvidia",
+        "ACCEPT_KEYWORDS": "~amd64"
+      },
+      "package_use": [
+        "media-video/pipewire sound-server jack-sdk lv2",
+        "media-libs/mesa vulkan-overlay zstd",
+        "sys-kernel/gentoo-kernel initramfs"
+      ],
+      "package_keywords": [
+        "app-emulation/wine-staging ~amd64",
+        "games-util/mangohud ~amd64"
+      ],
+      "package_mask": [],
+      "kernel_config": "CONFIG_PREEMPT=y\nCONFIG_HZ_1000=y\nCONFIG_LRU_GEN=y\nCONFIG_LRU_GEN_ENABLED=y\nCONFIG_ZSWAP=y\n",
+      "world_packages": [
+        "kde-plasma/plasma-meta",
+        "kde-apps/konsole",
+        "kde-apps/dolphin",
+        "media-video/pipewire",
+        "media-libs/mesa",
+        "games-util/mangohud",
+        "games-util/gamemode",
+        "sys-process/btop",
+        "www-client/firefox"
+      ]
+    },
+    {
+      "id": "handheld-znver2-gaming",
+      "name": "AMD znver2 Handheld Gaming",
+      "arch": "amd64",
+      "author": "gentool-profiles",
+      "description": "Binary-first znver2 handheld gaming profile with Gamescope, MangoHud, and AMD RDNA graphics.",
+      "make_conf": {
+        "COMMON_FLAGS": "-march=znver2 -O2 -pipe",
+        "USE": "X wayland kde plasma pipewire vulkan opengl vaapi zstd screencast networkmanager bluetooth",
+        "FEATURES": "buildpkg binpkg-multi-instance parallel-fetch",
+        "VIDEO_CARDS": "amdgpu radeonsi",
+        "ACCEPT_KEYWORDS": "~amd64"
+      },
+      "package_use": [
+        "sys-kernel/gentoo-kernel initramfs"
+      ],
+      "package_keywords": [],
+      "package_mask": [],
+      "kernel_config": "CONFIG_PREEMPT=y\nCONFIG_HZ_1000=y\n",
+      "world_packages": [
+        "kde-plasma/plasma-meta",
+        "gui-wm/gamescope",
+        "games-util/mangohud"
+      ]
+    },
+    {
+      "id": "mobile-plasma-arm64",
+      "name": "ARM64 Plasma Mobile Workstation",
+      "arch": "arm64",
+      "author": "gentool-profiles",
+      "description": "ARM64 Plasma Mobile and Wayland profile with Freedreno/VirtIO GPU and PipeWire audio.",
+      "make_conf": {
+        "COMMON_FLAGS": "-O2 -pipe",
+        "USE": "wayland kde plasma pipewire vulkan opengl zstd networkmanager bluetooth policykit udev dbus",
+        "FEATURES": "buildpkg binpkg-multi-instance parallel-fetch",
+        "VIDEO_CARDS": "freedreno virgl",
+        "ACCEPT_KEYWORDS": "~arm64"
+      },
+      "package_use": [],
+      "package_keywords": [],
+      "package_mask": [],
+      "kernel_config": "CONFIG_DEVTMPFS=y\nCONFIG_CGROUPS=y\nCONFIG_NAMESPACES=y\n",
+      "world_packages": [
+        "kde-plasma/plasma-meta",
+        "media-video/pipewire",
+        "media-video/wireplumber"
+      ]
+    }
+  ]
+}
