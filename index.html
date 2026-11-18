@@ -1,128 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fragtoo — Custom Gentoo Overlays & Target Builds</title>
-  <style>
-    :root {
-      --bg: #0f1117;
-      --card: #171a23;
-      --border: #2a2f3d;
-      --accent: #8b5cf6;
-      --accent2: #10b981;
-      --text: #e5e7eb;
-      --muted: #9ca3af;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      padding: 2rem 1.25rem;
-    }
-    .wrap { max-width: 920px; margin: 0 auto; }
-    header {
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 1.5rem;
-      margin-bottom: 2rem;
-    }
-    h1 { font-size: 2.2rem; letter-spacing: -0.02em; }
-    h1 span { color: var(--accent); }
-    .sub { color: var(--muted); margin-top: 0.4rem; font-size: 1.05rem; }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.25rem;
-      margin-bottom: 2rem;
-    }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 1.25rem;
-    }
-    .card h2 { font-size: 1.15rem; margin-bottom: 0.4rem; color: #fff; }
-    .tag {
-      display: inline-block;
-      font-size: 0.75rem;
-      padding: 0.15rem 0.5rem;
-      border-radius: 999px;
-      background: rgba(139, 92, 246, 0.18);
-      color: #c4b5fd;
-      margin-bottom: 0.6rem;
-    }
-    .tag.green { background: rgba(16, 185, 129, 0.18); color: #6ee7b7; }
-    .card p { color: var(--muted); font-size: 0.92rem; margin-bottom: 0.9rem; }
-    a { color: #a78bfa; text-decoration: none; font-weight: 500; }
-    a:hover { text-decoration: underline; }
-    pre {
-      background: #0a0c10;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1rem;
-      overflow-x: auto;
-      font-size: 0.88rem;
-      color: #d1d5db;
-    }
-    footer {
-      margin-top: 2.5rem;
-      padding-top: 1.25rem;
-      border-top: 1px solid var(--border);
-      color: var(--muted);
-      font-size: 0.85rem;
-    }
-  </style>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fragtoo — Gentoo Overlay Hub & Target Builds</title>
+<style>
+body{font-family:system-ui,sans-serif;background:#0d1117;color:#c9d1d9;max-width:960px;margin:2rem auto;padding:0 1rem;line-height:1.5}
+h1,h2,h3{color:#58a6ff} .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin:1.5rem 0}
+.card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:1rem}
+input,button{background:#0d1117;color:#c9d1d9;border:1px solid #30363d;border-radius:6px;padding:.5rem .75rem;font-size:.95rem}
+input{width:100%;box-sizing:border-box;margin-bottom:.6rem} button{background:#238636;border-color:#2ea043;color:#fff;cursor:pointer;font-weight:600}
+button.sec{background:#21262d;border-color:#30363d} code{background:#161b22;padding:.2rem .4rem;border-radius:4px;font-size:.88rem}
+a{color:#58a6ff;text-decoration:none} .tag{font-size:.78rem;color:#8b949e;text-transform:uppercase}
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <h1><span>Fragtoo</span> &amp; Gentool Ecosystem</h1>
-      <p class="sub">Custom-tuned Gentoo Linux overlays, Portage tooling, and hardware-targeted builds.</p>
-    </header>
+<h1>Fragtoo & Gentool Ecosystem</h1>
+<p>Community Gentoo overlay hub, Portage tooling, and hardware-targeted builds.</p>
 
-    <div class="grid">
-      <div class="card">
-        <span class="tag green">Steam Deck &bull; znver2</span>
-        <h2>Fragtoo</h2>
-        <p>Custom Gentoo overlay, kernel configs, and SteamOS/Gamescope session profiles tailored for Steam Deck hardware.</p>
-        <a href="https://github.com/andiallen1979//andiallen1979/Fragtoo">https://github.com/andiallen1979/Fragtoo &rarr;</a>
-      </div>
+<div class="grid" id="core"></div>
 
-      <div class="card">
-        <span class="tag">Binhost &bull; znver5</span>
-        <h2>WakStab</h2>
-        <p>Primary build host overlay housing the portable <code>gentool-*</code> Portage configuration suite and custom ebuilds.</p>
-        <a href="https://github.com/andiallen1979//andiallen1979/Fragtoo">https://github.com/andiallen1979/Fragtoo &rarr;</a>
-      </div>
+<h2>Community Overlay Directory (AUR-Style Hub)</h2>
+<input id="q" placeholder="Search overlays by name, owner, or description..." oninput="render()">
+<div id="list" class="grid"></div>
 
-      <div class="card">
-        <span class="tag">Dev &amp; QA Lab</span>
-        <h2>WakStabDevLab</h2>
-        <p>Dedicated bare-metal and QEMU development environment for testing overlays, kernels, and cross-target builds.</p>
-        <a href="https://github.com/andiallen1979//andiallen1979/WakStabDevLab">github.com/andiallen1979/WakStabDevLab &rarr;</a>
-      </div>
+<h2>Register a Gentoo Overlay</h2>
+<div class="card">
+  <input id="rName" placeholder="Overlay name (must match profiles/repo_name, e.g. my-overlay)">
+  <input id="rUri" placeholder="Git clone URI (https://github.com)">
+  <input id="rDesc" placeholder="Short description">
+  <input id="rOwner" placeholder="GitHub username">
+  <button onclick="submitOverlay()">Submit via GitHub Issue</button>
+</div>
 
-      <div class="card">
-        <span class="tag">Motorola &bull; arm64</span>
-        <h2>Minsktoo</h2>
-        <p>Experimental Gentoo <code>aarch64</code> overlay and device-specific kernel configuration for Motorola Minsk hardware.</p>
-        <a href="https://github.com/andiallen1979//andiallen1979/Fragtoo">https://github.com/andiallen1979/WakStab &rarr;</a>
-      </div>
-    </div>
+<script>
+const GH = "https://github.com" + "/andiallen1979/";
+const CORE = [
+  ["Steam Deck • znver2","Fragtoo","Custom Gentoo overlay, kernel configs, and Gamescope profiles.",GH+"Fragtoo"],
+  ["Binhost • znver5","WakStab","Primary build host overlay with portable gentool-* suite and custom ebuilds.",GH+"WakStab"],
+  ["Dev & QA Lab","WakStabDevLab","Bare-metal and QEMU development environment for overlays and kernels.",GH+"WakStabDevLab"],
+  ["Motorola • arm64","Minsktoo","Experimental Gentoo aarch64 overlay and device kernel config.",GH+"Minsktoo"]
+];
+document.getElementById("core").innerHTML = CORE.map(([t,n,d,u])=>`<div class="card"><div class="tag">${t}</div><h3>${n}</h3><p>${d}</p><a href="${u}">${u} →</a></div>`).join("");
 
-    <section class="card">
-      <h2>Quick Overlay Setup</h2>
-      <p>Enable any overlay via <code>eselect-repository</code>:</p>
-      <pre>eselect repository add Fragtoo git https://github.com/andiallen1979//andiallen1979/Fragtoo.git
-emaint sync -r Fragtoo
-emerge -av app-misc/fragtoo-meta</pre>
-    </section>
+let overlays = [];
+fetch("overlays.json").then(r=>r.json()).then(d=>{overlays=d.overlays||[];render();});
 
-    <footer>
-      &copy; 2026 Fragtoo Project &bull; Hosted on GitHub Pages
-    </footer>
-  </div>
+function render(){
+  const term = document.getElementById("q").value.toLowerCase();
+  const rows = overlays.filter(o=>`${o.name} ${o.owner} ${o.description}`.toLowerCase().includes(term));
+  document.getElementById("list").innerHTML = rows.map(o=>`
+    <div class="card">
+      <div class="tag">owner: ${o.owner} • ${o.sync_type||"git"}</div>
+      <h3>${o.name}</h3><p>${o.description}</p>
+      <p><code>fragtoo-hub add ${o.name}</code></p>
+      <button class="sec" onclick="navigator.clipboard.writeText('fragtoo-hub add ${o.name}')">Copy Command</button>
+      <a style="margin-left:.75rem" href="${o.homepage||o.sync_uri}">Repo →</a>
+    </div>`).join("") || "<p>No matching overlays found.</p>";
+}
+
+function submitOverlay(){
+  const payload = {name:rName.value.trim(),description:rDesc.value.trim(),owner:rOwner.value.trim(),sync_type:"git",sync_uri:rUri.value.trim()};
+  if(!payload.name || !payload.sync_uri) return alert("Name and Git URI are required.");
+  const u = new URL(GH + "fragtoo-site/issues/new");
+  u.searchParams.set("title", "Register overlay: " + payload.name);
+  u.searchParams.set("body", "```json\n" + JSON.stringify(payload, null, 2) + "\n```");
+  window.open(u.toString(), "_blank");
+}
+</script>
 </body>
 </html>

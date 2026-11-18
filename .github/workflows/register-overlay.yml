@@ -1,0 +1,57 @@
+name: Validate & Register Overlay
+on:
+  issues:
+    types: [opened, edited]
+permissions:
+  contents: write
+  issues: write
+jobs:
+  register:
+    if: startsWith(github.event.issue.title, 'Register overlay:')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate and append overlay
+        env:
+          ISSUE_BODY: \${{ github.event.issue.body }}
+          ISSUE_NUM: \${{ github.event.issue.number }}
+        run: |
+          python3 - << 'PY'
+          import json, os, re, subprocess, tempfile
+          m = re.search(r"```json\s*(\{.*?\})\s*```", os.environ["ISSUE_BODY"], re.S)
+          assert m, "Missing ```json block in issue body."
+          entry = json.loads(m.group(1))
+          name, uri = entry["name"].strip(), entry["sync_uri"].strip()
+          assert re.match(r"^[a-z0-9][a-z0-9_-]*$", name), "Overlay name must be lowercase alphanumeric/hyphen/underscore."
+          assert uri.startswith("https://") and uri.endswith(".git"), "sync_uri must be an https://...git URL."
+          with tempfile.TemporaryDirectory() as tmp:
+              subprocess.run(["git", "clone", "--depth", "1", uri, tmp], check=True)
+              rn_path = os.path.join(tmp, "profiles", "repo_name")
+              assert os.path.isfile(rn_path), "Repository missing profiles/repo_name."
+              repo_name = open(rn_path).read().strip()
+              assert repo_name == name, f"profiles/repo_name ({repo_name}) != requested name ({name})."
+          with open("overlays.json") as f:
+              reg = json.load(f)
+          assert not any(o["name"] == name for o in reg["overlays"]), f"Overlay '{name}' already registered."
+          reg["overlays"].append({
+              "name": name,
+              "description": entry.get("description", "")[:160],
+              "owner": entry.get("owner", "community"),
+              "sync_type": "git",
+              "sync_uri": uri,
+              "homepage": uri[:-4],
+              "quality": "experimental"
+          })
+          with open("overlays.json", "w") as f:
+              json.dump(reg, f, indent=2)
+              f.write("\n")
+          PY
+      - name: Commit and close issue
+        run: |
+          git config user.name "fragtoo-bot"
+          git config user.email "bot@fragtoo.com"
+          git commit -am "Register overlay from issue #${{ github.event.issue.number }}"
+          git push
+          gh issue close "${{ github.event.issue.number }}" -c "Overlay validated and published to https://fragtoo.com!"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
