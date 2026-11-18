@@ -18,6 +18,15 @@
       "sync_uri": "https://github.com/andiallen1979/WakStab.git",
       "homepage": "https://github.com/andiallen1979/WakStab",
       "quality": "experimental"
+    },
+    {
+      "name": "minsktoo",
+      "description": "Experimental Gentoo arm64 overlay and device kernel configs for Motorola phones",
+      "owner": "andiallen1979",
+      "sync_type": "git",
+      "sync_uri": "https://github.com/andiallen1979/Minsktoo.git",
+      "homepage": "https://github.com/andiallen1979/Minsktoo",
+      "quality": "experimental"
     }
   ]
 }
