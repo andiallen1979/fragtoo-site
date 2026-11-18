@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Install Fragtoo Hub
+Comment=Bootstrap Fragtoo overlay and install fragtoo-hub CLI
+Exec=bash -c 'U="https://fragtoo.com"; P="/install.sh"; curl -fsSL "${U}${P}" | sudo bash; echo ""; read -p "Press Enter to close..."'
+Icon=utilities-terminal
+Terminal=true
+Type=Application
+Categories=System;Utility;

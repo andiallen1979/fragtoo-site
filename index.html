@@ -2,45 +2,87 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Fragtoo — Gentoo Overlay Hub & Target Builds</title>
+<title>Fragtoo — Steam Deck Binary Distro & Gentoo Overlay Hub</title>
 <style>
-body{font-family:system-ui,sans-serif;background:#0d1117;color:#c9d1d9;max-width:960px;margin:2rem auto;padding:0 1rem;line-height:1.5}
-h1,h2,h3{color:#58a6ff} .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin:1.5rem 0}
+body{font-family:system-ui,sans-serif;background:#0d1117;color:#c9d1d9;margin:0;line-height:1.55}
+nav{background:#161b22;border-bottom:1px solid #30363d;padding:.75rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.brand{font-weight:700;font-size:1.1rem;color:#58a6ff} .links{display:flex;gap:1.25rem;align-items:center}
+.drop{position:relative} .drop-btn{background:none;border:none;color:#c9d1d9;font-size:.95rem;cursor:pointer;padding:0}
+.drop-menu{display:none;position:absolute;right:0;top:1.75rem;background:#161b22;border:1px solid #30363d;border-radius:8px;min-width:230px;padding:.4rem 0;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.drop:hover .drop-menu,.drop:focus-within .drop-menu{display:block}
+.drop-menu a{display:block;padding:.5rem 1rem;color:#c9d1d9} .drop-menu a:hover{background:#21262d;color:#58a6ff}
+main{max-width:960px;margin:2rem auto;padding:0 1rem}
+h1,h2,h3{color:#58a6ff;margin-top:0} .hero{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:1.5rem;margin-bottom:2rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1rem;margin:1rem 0 2rem}
 .card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:1rem}
-input,button{background:#0d1117;color:#c9d1d9;border:1px solid #30363d;border-radius:6px;padding:.5rem .75rem;font-size:.95rem}
-input{width:100%;box-sizing:border-box;margin-bottom:.6rem} button{background:#238636;border-color:#2ea043;color:#fff;cursor:pointer;font-weight:600}
-button.sec{background:#21262d;border-color:#30363d} code{background:#161b22;padding:.2rem .4rem;border-radius:4px;font-size:.88rem}
-a{color:#58a6ff;text-decoration:none} .tag{font-size:.78rem;color:#8b949e;text-transform:uppercase}
+pre,code{background:#010409;border:1px solid #30363d;border-radius:6px;font-family:ui-monospace,monospace}
+pre{padding:.85rem;overflow-x:auto;font-size:.88rem} code{padding:.15rem .35rem;font-size:.86rem}
+input,button.act{background:#0d1117;color:#c9d1d9;border:1px solid #30363d;border-radius:6px;padding:.55rem .75rem;font-size:.95rem}
+input{width:100%;box-sizing:border-box;margin-bottom:.6rem} button.act{background:#238636;border-color:#2ea043;color:#fff;cursor:pointer;font-weight:600}
+button.sec{background:#21262d;border-color:#30363d} a{color:#58a6ff;text-decoration:none}
+.tag{font-size:.76rem;color:#8b949e;text-transform:uppercase} .steps li{margin-bottom:.4rem}
 </style>
 </head>
 <body>
-<h1>Fragtoo & Gentool Ecosystem</h1>
-<p>Community Gentoo overlay hub, Portage tooling, and hardware-targeted builds.</p>
+<nav>
+  <div class="brand">Fragtoo</div>
+  <div class="links">
+    <a href="#install">Install CLI</a>
+    <a href="#directory">Overlay Hub</a>
+    <a href="#register">Register Overlay</a>
+    <div class="drop">
+      <button class="drop-btn">Related Projects ▾</button>
+      <div class="drop-menu" id="relMenu"></div>
+    </div>
+  </div>
+</nav>
 
-<div class="grid" id="core"></div>
+<main>
+  <section class="hero">
+    <div class="tag">Steam Deck • znver2 Binary Distro & Portage Hub</div>
+    <h1>Fragtoo Linux & Community Overlay Registry</h1>
+    <p>A binary-first Gentoo distribution engineered for Steam Deck (<code>znver2</code>) paired with an open, user-driven overlay directory. Install community overlays without waiting on central XML gatekeepers.</p>
+  </section>
 
-<h2>Community Overlay Directory (AUR-Style Hub)</h2>
-<input id="q" placeholder="Search overlays by name, owner, or description..." oninput="render()">
-<div id="list" class="grid"></div>
+  <section id="install" class="card" style="margin-bottom:2rem">
+    <h2>1. Bootstrap <code>fragtoo-hub</code> on Any Gentoo System</h2>
+    <p>Because single ebuilds cannot be hosted directly in the official Gentoo tree without dev-channel review, use our bootstrap script to register the <code>fragtoo</code> repo and merge <code>app-portage/fragtoo-hub</code> in one step:</p>
+    <pre id="bootCmd">curl -fsSL https://fragtoo.com | sudo bash</pre>
+    <a class="act" style="display:inline-block;padding:.55rem .85rem;border-radius:6px;background:#238636;color:#fff;font-weight:600;margin-right:.5rem" href="fragtoo-hub-installer.desktop" download="fragtoo-hub-installer.desktop">Download Desktop Installer (.desktop)</a>
+    <button class="act sec" onclick="navigator.clipboard.writeText(document.getElementById('bootCmd').innerText)">Copy Bootstrap Command</button>
+    <ol class="steps" style="margin-top:1rem">
+      <li>Configures <code>/etc/portage/repos.conf/fragtoo.conf</code> pointing to the Fragtoo Git overlay.</li>
+      <li>Syncs the tree via <code>emaint sync -r fragtoo</code> and unmasks <code>~amd64</code> / <code>~arm64</code> for <code>fragtoo-hub</code>.</li>
+      <li>Emerges <code>app-portage/fragtoo-hub</code> so you can run <code>fragtoo-hub list</code> and <code>fragtoo-hub add &lt;name&gt;</code>.</li>
+    </ol>
+  </section>
 
-<h2>Register a Gentoo Overlay</h2>
-<div class="card">
-  <input id="rName" placeholder="Overlay name (must match profiles/repo_name, e.g. my-overlay)">
-  <input id="rUri" placeholder="Git clone URI (https://github.com)">
-  <input id="rDesc" placeholder="Short description">
-  <input id="rOwner" placeholder="GitHub username">
-  <button onclick="submitOverlay()">Submit via GitHub Issue</button>
-</div>
+  <section id="directory">
+    <h2>2. Community Overlay Directory (By Users, For Users)</h2>
+    <input id="q" placeholder="Search overlays by name, maintainer, or description..." oninput="render()">
+    <div id="list" class="grid"></div>
+  </section>
+
+  <section id="register" class="card">
+    <h2>3. Register Your Overlay</h2>
+    <p>Maintainers can publish any Git-hosted Gentoo overlay directly to this hub. Automated CI validates your <code>profiles/repo_name</code> and publishes it live within seconds.</p>
+    <input id="rName" placeholder="Overlay name (exact match to profiles/repo_name, lowercase)">
+    <input id="rUri" placeholder="Git clone URI (https://github.com)">
+    <input id="rDesc" placeholder="Short description of packages or target hardware">
+    <input id="rOwner" placeholder="Your GitHub username">
+    <button class="act" onclick="submitOverlay()">Submit Overlay via GitHub</button>
+  </section>
+</main>
 
 <script>
 const GH = "https://github.com" + "/andiallen1979/";
-const CORE = [
-  ["Steam Deck • znver2","Fragtoo","Custom Gentoo overlay, kernel configs, and Gamescope profiles.",GH+"Fragtoo"],
-  ["Binhost • znver5","WakStab","Primary build host overlay with portable gentool-* suite and custom ebuilds.",GH+"WakStab"],
-  ["Dev & QA Lab","WakStabDevLab","Bare-metal and QEMU development environment for overlays and kernels.",GH+"WakStabDevLab"],
-  ["Motorola • arm64","Minsktoo","Experimental Gentoo aarch64 overlay and device kernel config.",GH+"Minsktoo"]
+const RELATED = [
+  ["Fragtoo (Steam Deck znver2)", GH + "Fragtoo"],
+  ["WakStab (znver5 Binhost)", GH + "WakStab"],
+  ["WakStabDevLab (QA & Build Lab)", GH + "WakStabDevLab"],
+  ["Minsktoo (Motorola arm64)", GH + "Minsktoo"]
 ];
-document.getElementById("core").innerHTML = CORE.map(([t,n,d,u])=>`<div class="card"><div class="tag">${t}</div><h3>${n}</h3><p>${d}</p><a href="${u}">${u} →</a></div>`).join("");
+document.getElementById("relMenu").innerHTML = RELATED.map(([n,u])=>`<a href="${u}" target="_blank">${n}</a>`).join("");
 
 let overlays = [];
 fetch("overlays.json").then(r=>r.json()).then(d=>{overlays=d.overlays||[];render();});
@@ -50,17 +92,17 @@ function render(){
   const rows = overlays.filter(o=>`${o.name} ${o.owner} ${o.description}`.toLowerCase().includes(term));
   document.getElementById("list").innerHTML = rows.map(o=>`
     <div class="card">
-      <div class="tag">owner: ${o.owner} • ${o.sync_type||"git"}</div>
+      <div class="tag">maintainer: ${o.owner} • ${o.sync_type||"git"}</div>
       <h3>${o.name}</h3><p>${o.description}</p>
       <p><code>fragtoo-hub add ${o.name}</code></p>
-      <button class="sec" onclick="navigator.clipboard.writeText('fragtoo-hub add ${o.name}')">Copy Command</button>
-      <a style="margin-left:.75rem" href="${o.homepage||o.sync_uri}">Repo →</a>
+      <button class="act sec" onclick="navigator.clipboard.writeText('fragtoo-hub add ${o.name}')">Copy Add Command</button>
+      <a style="margin-left:.75rem" href="${o.homepage||o.sync_uri}" target="_blank">Source →</a>
     </div>`).join("") || "<p>No matching overlays found.</p>";
 }
 
 function submitOverlay(){
   const payload = {name:rName.value.trim(),description:rDesc.value.trim(),owner:rOwner.value.trim(),sync_type:"git",sync_uri:rUri.value.trim()};
-  if(!payload.name || !payload.sync_uri) return alert("Name and Git URI are required.");
+  if(!payload.name || !payload.sync_uri) return alert("Overlay name and Git URI are required.");
   const u = new URL(GH + "fragtoo-site/issues/new");
   u.searchParams.set("title", "Register overlay: " + payload.name);
   u.searchParams.set("body", "```json\n" + JSON.stringify(payload, null, 2) + "\n```");
